@@ -71,7 +71,7 @@ if item_option == "(新規入力)":
 # 実際の登録用フォーム
 with st.sidebar.form("input_form", clear_on_submit=True):
     trade_type = st.radio("取引種別", ["販売", "買取"], horizontal=True)
-    price = st.number_input("価格 (G)", min_value=0, step=1)
+    price = st.number_input("価格 (€)", min_value=0, step=1)
     note = st.text_area("備考")
     
     # 送信ボタン
