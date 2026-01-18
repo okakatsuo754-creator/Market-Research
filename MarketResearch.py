@@ -72,7 +72,7 @@ with st.sidebar.form("input_form", clear_on_submit=True):
     final_item = new_item_name if item_option == "(新規入力)" else item_option
     
     # 4. 価格と備考
-    price = st.number_input("価格 (G)", min_value=0, step=1)
+    price = st.number_input("価格 (€)", min_value=0, step=1)
     note = st.text_area("備考")
     
     if st.form_submit_button("データベースへ保存"):
