@@ -28,59 +28,65 @@ sheet = connect_google_sheet()
 
 # --- データの読み込み ---
 raw_data = sheet.get_all_values()
-# 新しい列構成
 headers_list = ["国名", "カテゴリ", "取引種別", "アイテム名", "価格", "備考"]
 
 if len(raw_data) > 1:
     df = pd.DataFrame(raw_data[1:], columns=raw_data[0])
-    # 列が足りない場合の補完ロジック
     if "取引種別" not in df.columns:
         df["取引種別"] = "販売"
-    # 価格を数値型に変換
     df["価格"] = pd.to_numeric(df["価格"], errors='coerce').fillna(0).astype(int)
 else:
     df = pd.DataFrame(columns=headers_list)
 
-# カテゴリ定義
 mc_categories = ["建築ブロック", "植物・食料", "鉱石・インゴット", "モブドロップ", "エンチャント/装備", "ポーション", "その他"]
 
 st.title("国運営：貿易・市場調査システム")
 
-# タブ分け
 tab1, tab2 = st.tabs(["📊 市場データ表示", "⚙️ データの編集・削除"])
 
 # --- サイドバー：新規登録 ---
 st.sidebar.header("📥 新規データ登録")
+
+# 1. 国名の選択 (フォームの外に出すことで動的な連動を可能にする)
+existing_countries = sorted(df["国名"].unique().tolist()) if not df.empty else []
+country_option = st.sidebar.selectbox("国を選択", ["(新規入力)"] + existing_countries)
+new_country_name = ""
+if country_option == "(新規入力)":
+    new_country_name = st.sidebar.text_input("新しい国名を入力")
+
+# 2. カテゴリの選択 (これによってアイテムの選択肢を変える)
+selected_category = st.sidebar.selectbox("カテゴリを選択", mc_categories)
+
+# 3. 選択されたカテゴリに属するアイテムのみを抽出
+if not df.empty:
+    filtered_items = sorted(df[df["カテゴリ"] == selected_category]["アイテム名"].unique().tolist())
+else:
+    filtered_items = []
+
+item_option = st.sidebar.selectbox(f"{selected_category} 内のアイテムを選択", ["(新規入力)"] + filtered_items)
+new_item_name = ""
+if item_option == "(新規入力)":
+    new_item_name = st.sidebar.text_input("新しいアイテム名を入力")
+
+# 実際の登録用フォーム
 with st.sidebar.form("input_form", clear_on_submit=True):
-    # 1. 国名の選択/入力
-    existing_countries = sorted(df["国名"].unique().tolist()) if not df.empty else []
-    country_option = st.selectbox("国を選択", ["(新規入力)"] + existing_countries)
-    new_country_name = st.text_input("新しい国名（新規のみ）")
-    final_country = new_country_name if country_option == "(新規入力)" else country_option
-    
-    # 2. カテゴリと取引種別
-    col_cat, col_type = st.columns(2)
-    with col_cat:
-        category = st.selectbox("カテゴリ", mc_categories)
-    with col_type:
-        trade_type = st.radio("取引種別", ["販売", "買取"], horizontal=True)
-    
-    # 3. アイテム名の選択/入力
-    existing_items = sorted(df["アイテム名"].unique().tolist()) if not df.empty else []
-    item_option = st.selectbox("アイテムを選択", ["(新規入力)"] + existing_items)
-    new_item_name = st.text_input("新しいアイテム名（新規のみ）")
-    final_item = new_item_name if item_option == "(新規入力)" else item_option
-    
-    # 4. 価格と備考
-    price = st.number_input("価格 (€)", min_value=0, step=1)
+    trade_type = st.radio("取引種別", ["販売", "買取"], horizontal=True)
+    price = st.number_input("価格 (G)", min_value=0, step=1)
     note = st.text_area("備考")
     
-    if st.form_submit_button("データベースへ保存"):
+    # 送信ボタン
+    submit = st.form_submit_button("データベースへ保存")
+    
+    if submit:
+        final_country = new_country_name if country_option == "(新規入力)" else country_option
+        final_item = new_item_name if item_option == "(新規入力)" else item_option
+        
         if final_country and final_item:
-            # スプレッドシートの列順序に合わせて保存
-            sheet.append_row([final_country, category, trade_type, final_item, price, note])
-            st.sidebar.success(f"{final_item} の情報を登録しました！")
+            sheet.append_row([final_country, selected_category, trade_type, final_item, price, note])
+            st.sidebar.success(f"{final_item} を登録しました！")
             st.rerun()
+        else:
+            st.error("国名とアイテム名は必須です。")
 
 # --- タブ1：表示・検索・比較 ---
 with tab1:
@@ -133,7 +139,6 @@ with tab2:
         st.write("データがありません。")
     else:
         df_with_id = df.copy()
-        # スプレッドシートの行番号(2行目開始)をIDとして保持
         df_with_id["ID"] = range(2, len(df) + 2) 
         
         edit_target = st.selectbox(
@@ -157,7 +162,6 @@ with tab2:
                     e_note = st.text_area("備考", value=edit_target["備考"])
                     
                     if st.form_submit_button("変更を保存"):
-                        # 新しい列構成 [国名, カテゴリ, 取引種別, アイテム名, 価格, 備考] で更新
                         updated_values = [[e_country, e_cat, e_type, e_item, e_price, e_note]]
                         sheet.update(range_name=f"A{row_num}:F{row_num}", values=updated_values)
                         st.success("更新しました！")
