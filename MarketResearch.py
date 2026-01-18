@@ -5,11 +5,36 @@ import pandas as pd
 
 # --- Googleシート接続設定 ---
 def connect_google_sheet():
+    # 権限の範囲を指定
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
+    
+    # --- Secretsから情報を取得して辞書を作成 ---
+    # st.secrets の中身をそのまま辞書として扱います
+    creds_dict = {
+        "type": st.secrets["type"],
+        "project_id": st.secrets["project_id"],
+        "private_key_id": st.secrets["private_key_id"],
+        "private_key": st.secrets["private_key"],
+        "client_email": st.secrets["client_email"],
+        "client_id": st.secrets["client_id"],
+        "auth_uri": st.secrets["auth_uri"],
+        "token_uri": st.secrets["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["client_x509_cert_url"],
+        "universe_domain": st.secrets["universe_domain"]
+    }
+    
+    # 辞書データを使って認証
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
-    spreadsheet = client.open("Market Research")
-    return spreadsheet.get_worksheet(0)
+    
+    # スプレッドシート名「Market Research」を開く
+    try:
+        spreadsheet = client.open("Market Research")
+        return spreadsheet.get_worksheet(0)
+    except Exception as e:
+        st.error(f"スプレッドシートへの接続に失敗しました。サービスアカウントにシートの共有設定ができているか確認してください: {e}")
+        return None
 
 # アプリの初期設定
 st.set_page_config(page_title="貿易管理システム", layout="wide")
