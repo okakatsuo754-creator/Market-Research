@@ -54,13 +54,16 @@ st.sidebar.header("📥 新規データ登録")
 with st.sidebar.form("input_form", clear_on_submit=True):
     # 1. 国名の選択/入力
     existing_countries = sorted(df["国名"].unique().tolist()) if not df.empty else []
-    country_option = st.sidebar.selectbox("国を選択", ["(新規入力)"] + existing_countries)
-    new_country_name = st.sidebar.text_input("新しい国名（新規のみ）")
+    country_option = st.selectbox("国を選択", ["(新規入力)"] + existing_countries)
+    new_country_name = st.text_input("新しい国名（新規のみ）")
     final_country = new_country_name if country_option == "(新規入力)" else country_option
     
     # 2. カテゴリと取引種別
-    category = st.selectbox("カテゴリ", mc_categories)
-    trade_type = st.radio("取引種別", ["販売", "買取"], horizontal=True)
+    col_cat, col_type = st.columns(2)
+    with col_cat:
+        category = st.selectbox("カテゴリ", mc_categories)
+    with col_type:
+        trade_type = st.radio("取引種別", ["販売", "買取"], horizontal=True)
     
     # 3. アイテム名の選択/入力
     existing_items = sorted(df["アイテム名"].unique().tolist()) if not df.empty else []
@@ -74,8 +77,9 @@ with st.sidebar.form("input_form", clear_on_submit=True):
     
     if st.form_submit_button("データベースへ保存"):
         if final_country and final_item:
+            # スプレッドシートの列順序に合わせて保存
             sheet.append_row([final_country, category, trade_type, final_item, price, note])
-            st.sidebar.success(f"{final_item} を登録しました！")
+            st.sidebar.success(f"{final_item} の情報を登録しました！")
             st.rerun()
 
 # --- タブ1：表示・検索・比較 ---
