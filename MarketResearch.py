@@ -2,6 +2,7 @@ import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
+import json
 
 # --- Googleシート接続設定 ---
 def connect_google_sheet():
@@ -87,6 +88,35 @@ with st.sidebar.form("input_form", clear_on_submit=True):
             st.rerun()
         else:
             st.error("国名とアイテム名は必須です。")
+            
+st.sidebar.divider()
+st.sidebar.header(":package: 一括データ登録")
+uploaded_file = st.sidebar.file_uploader("JSONファイルをアップロード", type="json")
+
+if uploaded_file is not None:
+    try:
+        data_to_import = json.load(uploaded_file)
+        new_rows = []
+        
+        # JSON構造をスプレッドシート形式にフラット化
+        # 構造: { 国名: { カテゴリ: { "アイテム名 (種別)": 価格 } } }
+        for country, categories in data_to_import.items():
+            for category, items in categories.items():
+                for item_key, price in items.items():
+                    # 種別の判別とアイテム名のクリーンアップ
+                    trade_type = "買取" if "(買取)" in item_key else "販売"
+                    clean_item = item_key.replace(" (販売)", "").replace(" (買取)", "")
+                    
+                    # スプレッドシートの列順: [国名, カテゴリ, 取引種別, アイテム名, 価格, 備考]
+                    new_rows.append([country, category, trade_type, clean_item, price, "一括登録"])
+        
+        if st.sidebar.button(f"{len(new_rows)}件を一括保存"):
+            sheet.append_rows(new_rows)
+            st.sidebar.success("一括登録が完了しました！")
+            st.rerun()
+            
+    except Exception as e:
+        st.sidebar.error(f"ファイル読み込みエラー: {e}")
 
 # --- タブ1：表示・検索・比較 ---
 with tab1:
