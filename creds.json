@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "magnetic-gadget-484709-b9",
+  "private_key_id": "111e9035a9b887d46332dc87fc7cd97d90a1638b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoUL9i6R+eQZZg\nmdUo35q5b633T6LinPYybJV7M82PbBFtCIP6Udggs+NBtZg0hncCfPygv5VuJwL8\nTk1erczaa1wMpl1RiKlHAgE4bN6FTnzkn7a3g5nU5KWCF7fh7vcYEPjkOjd8yf0k\nedAvpLnVTnaSlMW44hgnvtKxMxGheKL5QC+J7S3VZJr7/WLOBJhTBWhFAgvZ1Kz7\n1DcCWLGJ06AO9r2GfdtYE0a3K2R1w1K2ALZrlN5P4sALenP28uJ0f6ROFyOOeRNx\n4ENDoMgyLoUDgCiORzOd04p17l05Ftu6pLaAPjIPXrLA4SYKeekUC4q8FwXahx1r\ngI3y9GLpAgMBAAECggEAPpuGjSqs7ad04arm/KSr/2UYv0DalFORSnFUavb6c+pd\nUwLTYLW34HY5RrRfEM6hjwXhzINm+Im/VQ1lPx4D8Iz1uOjbFlxwpu6KeKwaW1i2\nIS59fyaO/n8sR0c+SWajd8q8Ydx7zkmuBTbgZxBtZXghp+V55IsJNCOJaItX+Aj2\nl9cbHDsWjMVnt4QbMNLL1tU1Csk5sjfw2XvKMKlnf29uoiQ+D4JQ3BM6PRkdPC2P\n50rOqHpGddqOxmHsDw8RF3dBXnGclLie7RARqKIht8VHcoOrrLvwry0FnTJs6TpR\nSjlPSg+SXqOMtrr36xgnPHBGbf7XBBWvV1VUu7Y+HwKBgQDS9rzEhZ+CESyH1TG+\nizGj1SBSpbI2PCkQUVnDaqy90ML5ntmod975Bzh0D7E65Fqx6SrNraCtBXUvsxSy\nifabm6zKHSzaU+OQnSxvMFS3eWSF9ZLo+Zjpg16lwprHbNSzf2y3QRYFeMYF5Ost\nTyoRweLFmCav6Kmbo1UPa4CnPwKBgQDMP0HSLgzLiksWf0GxIvfJjMJc0+UueDXK\nMif0jR3gMRu3zn88zs9FYfyufoHXOQfC9S9yAlsjpzgMAu3W9ufJaV96vbAUz/s3\nZuoqgXhuL6PAuvFY4pcTqDwqogJW2bFTYankC0E56D21KF971jtP/hhAq/o9DpsQ\nmMD+IzHT1wKBgCF0gYEE08PTp2UvGQFnn4qkrMiOgFF7fuOYkwybaSN87L6bQ1cl\nE1YYoAo/xtJZDkzydhhB9Z4apHfZBWo+2L3alS9EKy3AafEwC7DiUDz8YkWgKRkL\nJAW8EJFm6BbCGoUQqxPwnWZmvbiHkggQatKAFc9SDqiM1ADbiQy19qQPAoGBALLR\nxyzfCHDDmU4PCFKvzMV3KUvgcMyojl+CXhzr1/ZKyHu6nQd+AVY7neCf/cmSssrr\noyhsC6NBaf6KKfWEohZi3Sc3IAx4svckcWvZgrjlmLbKdTde2upo5pRk1yt22Jup\n6/YuLGMog64xtLdVLwSv8Efeye3e9cAoHP/jjGJtAoGAeb+kIMS5xtNRr0ZsL+s+\nZZGcDrjv+iw8nj9+S5d89hEPWHRZMeR9pH5eLOZvdwLKO7ixxWCz8e/YrEd61gwb\n9UDPQ1S0z+OoPEkIezJ/78Qjml6Jg4z3LFCS67cW69NhvExMwrNEPimlaUKvMH8a\nvQFCSuR0+IaClrEvSE4lTGQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "python-access@magnetic-gadget-484709-b9.iam.gserviceaccount.com",
+  "client_id": "104989358357525192229",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/python-access%40magnetic-gadget-484709-b9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
